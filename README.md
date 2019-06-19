@@ -5,8 +5,9 @@ Acts as an API only, must be run alongside React front end.
 
 ASSUMES CREDITIALS:
 username: root
-password: 3200final
-If other credentials are used, configure the global variable in run.py
+password: webdev
+database: cs3200final
+If other credentials are used, configure the global variables in run.py
 to reflect proper login credentials.
 
 To run:
