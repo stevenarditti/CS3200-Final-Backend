@@ -38,8 +38,7 @@ def openConnection():
                       cursorclass=pymysql.cursors.DictCursor)
 
     except:
-        print('Could not establish database connection.', file=sys.stderr)
-        print('Make sure login credentials in run.py are correct.', file=sys.stderr)
+        print('Could not establish database connection.')
 
 
 @app.route('/reviews', methods=['GET', 'POST'])
@@ -61,8 +60,9 @@ def hello_world():
                 sql = sql + str(request.data["rating"]) + ", '"
                 sql = sql + request.data["description"] + "');"
                 cursor.execute(sql)
+                con.commit()
                 return sendResponse(PASS, "")
-        except:
+        except Exception as e:
             return sendResponse(FAIL, 'BAD INPUTS')
 
 openConnection()
