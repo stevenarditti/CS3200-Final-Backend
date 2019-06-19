@@ -65,4 +65,16 @@ def hello_world():
         except Exception as e:
             return sendResponse(FAIL, 'BAD INPUTS')
 
+@app.route('/reviews/delete/<int:id>', methods=['DELETE'])
+def delete(id):
+  sql = "DELETE FROM reviews WHERE review_id = {};".format(id);
+  print sql
+  try:
+    con.cursor().execute(sql)
+    con.commit()
+    return 'ok'
+  except Exception as e:
+    print e 
+    return 'ok'
+
 openConnection()
