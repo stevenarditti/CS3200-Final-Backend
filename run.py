@@ -10,7 +10,7 @@ CORS(app)
 
 # ----------  DATABASE CREDENTIALS  ----------
 USERNAME = 'root'
-PASSWORD = 'bertuccis'
+PASSWORD = 'webdev'
 DBNAME   = 'cs3200final'
 # --------------------------------------------
 
@@ -78,13 +78,10 @@ def get(id):
     except Exception as e:
         return sendResponse(FAIL, e)
   else:
-    print "PUT REQUEST RECEIVED"
     try:
       body = request.data
-      print body
       with con.cursor() as  cursor:
         sql = "UPDATE reviews set movie_id = {}, reviewer_id = {}, rating = {}, description = '{}' WHERE review_id = {};".format(body['movie_id'], body['reviewer_id'], body['rating'], body['description'], body['review_id'])
-        print sql
         cursor.execute(sql)
         con.commit()
         return sendResponse(PASS, "")
@@ -106,5 +103,20 @@ def delete(id):
             return sendResponse(PASS, result)
     except Exception as e:
         return sendResponse(FAIL, e)
+
+
+@app.route('/dropdown')
+def dropdown():
+  sql = "SELECT movie_id, title from movies;"
+  try: 
+    with con.cursor() as cursor:
+      cursor.execute(sql)
+      movies = cursor.fetchall()
+      sql = "SELECT reviewer_id, name from reviewers;"
+      cursor.execute(sql)
+      reviewers = cursor.fetchall()
+      return sendResponse(PASS, {"reviewers": reviewers, "movies": movies})
+  except Exception as e:
+    return sendResponse(FAIL, e)
 
 openConnection()
