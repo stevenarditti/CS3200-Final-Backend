@@ -10,7 +10,7 @@ CORS(app)
 
 # ----------  DATABASE CREDENTIALS  ----------
 USERNAME = 'root'
-PASSWORD = 'webdev'
+PASSWORD = 'bertuccis'
 DBNAME   = 'cs3200final'
 # --------------------------------------------
 
@@ -66,9 +66,10 @@ def hello_world():
             return sendResponse(FAIL, 'BAD INPUTS')
 
 
-@app.route('/reviews/<int:id>', methods=['GET'])
+@app.route('/reviews/<int:id>', methods=['GET', 'PUT'])
 def get(id):
-    sql = "SELECT FROM reviews WHERE review_id = {};".format(id)
+  if request.method == 'GET':
+    sql = "SELECT * FROM reviews WHERE review_id = {};".format(id)
     try:
         with con.cursor() as cursor:
             cursor.execute(sql)
@@ -76,6 +77,20 @@ def get(id):
             return sendResponse(PASS, result)
     except Exception as e:
         return sendResponse(FAIL, e)
+  else:
+    print "PUT REQUEST RECEIVED"
+    try:
+      body = request.data
+      print body
+      with con.cursor() as  cursor:
+        sql = "UPDATE reviews set movie_id = {}, reviewer_id = {}, rating = {}, description = '{}' WHERE review_id = {};".format(body['movie_id'], body['reviewer_id'], body['rating'], body['description'], body['review_id'])
+        print sql
+        cursor.execute(sql)
+        con.commit()
+        return sendResponse(PASS, "")
+    except Exception as e:
+      print e
+      return sendResponse(FAIL, 'BAD INPUTS')
 
 
 @app.route('/reviews/delete/<int:id>', methods=['DELETE'])
