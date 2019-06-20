@@ -65,6 +65,19 @@ def hello_world():
         except Exception as e:
             return sendResponse(FAIL, 'BAD INPUTS')
 
+
+@app.route('/reviews/<int:id>', methods=['GET'])
+def get(id):
+    sql = "SELECT FROM reviews WHERE review_id = {};".format(id)
+    try:
+        with con.cursor() as cursor:
+            cursor.execute(sql)
+            result = cursor.fetchall()
+            return sendResponse(PASS, result)
+    except Exception as e:
+        return sendResponse(FAIL, e)
+
+
 @app.route('/reviews/delete/<int:id>', methods=['DELETE'])
 def delete(id):
     sql = "DELETE FROM reviews WHERE review_id = {};".format(id)
