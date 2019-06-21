@@ -42,11 +42,12 @@ def openConnection():
 
 
 @app.route('/reviews', methods=['GET', 'POST'])
-def hello_world():
-
+def get_reviews():
     if request.method == 'GET':
         with con.cursor() as cursor:
-            sql = "SELECT * FROM reviews;"
+            sql = "SELECT * FROM reviews r "
+            sql += "JOIN movies m ON r.movie_id = m.movie_id "
+            sql += "JOIN reviewers re ON r.reviewer_id = re.reviewer_id;"
             cursor.execute(sql)
             result = cursor.fetchall()
             return sendResponse(PASS, result)
@@ -62,7 +63,7 @@ def hello_world():
                 cursor.execute(sql)
                 con.commit()
                 return sendResponse(PASS, "")
-        except Exception as e:
+        except:
             return sendResponse(FAIL, 'BAD INPUTS')
 
 
@@ -75,8 +76,8 @@ def get(id):
             cursor.execute(sql)
             result = cursor.fetchall()
             return sendResponse(PASS, result)
-    except Exception as e:
-        return sendResponse(FAIL, e)
+    except:
+        return sendResponse(FAIL, '')
   else:
     try:
       body = request.data
@@ -85,8 +86,7 @@ def get(id):
         cursor.execute(sql)
         con.commit()
         return sendResponse(PASS, "")
-    except Exception as e:
-      print e
+    except:
       return sendResponse(FAIL, 'BAD INPUTS')
 
 
@@ -101,8 +101,36 @@ def delete(id):
             cursor.execute(sql)
             result = cursor.fetchall()
             return sendResponse(PASS, result)
-    except Exception as e:
-        return sendResponse(FAIL, e)
+    except:
+        return sendResponse(FAIL, '')
+
+
+@app.route('/movies/<int:id>/', methods=['GET'])
+def get_movies(id):
+    sql = "SELECT * FROM movies WHERE movie_id = {};".format(id)
+    try:
+        with con.cursor() as cursor:
+            cursor.execute(sql)
+            result = cursor.fetchall()
+            return sendResponse(PASS, result)
+    except:
+        return sendResponse(FAIL, '')
+
+
+@app.route('/movies/<int:id>/actors/', methods=['GET'])
+def get_movie_actors(id):
+    try:
+        with con.cursor() as cursor:
+            sql = "SELECT name, biography, headshot_url FROM cast_members c "
+            sql += "JOIN movies m ON c.movie_id=m.movie_id "
+            sql += "JOIN actors a ON c.actor_id=a.actor_id "
+            sql += "WHERE c.movie_id = {};".format(id)
+            cursor.execute(sql)
+            result = cursor.fetchall()
+            return sendResponse(PASS, result)
+    except:
+        sendResponse(FAIL, '')
+
 
 
 @app.route('/dropdown')
