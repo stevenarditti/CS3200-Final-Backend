@@ -1,4 +1,4 @@
-IMCS3200DB
+CS3200DB
 
 Flask server running on localhost:5000
 Acts as an API only, must be run alongside React front end.
