@@ -58,8 +58,9 @@ def get_reviews():
                 sql = "INSERT INTO reviews (movie_id, reviewer_id, rating, description) VALUES ("
                 sql = sql + str(request.data["movie_id"]) + ", "
                 sql = sql + str(request.data["reviewer_id"]) + ", "
-                sql = sql + str(request.data["rating"]) + ", '"
-                sql = sql + request.data["description"] + "');"
+                sql = sql + str(request.data["rating"]) + ", "
+                sql = sql + con.escape(request.data["description"]) + ");"
+                print(sql, file=sys.stderr)
                 cursor.execute(sql)
                 con.commit()
                 return sendResponse(PASS, "")
@@ -82,7 +83,7 @@ def get(id):
     try:
       body = request.data
       with con.cursor() as  cursor:
-        sql = "UPDATE reviews set movie_id = {}, reviewer_id = {}, rating = {}, description = '{}' WHERE review_id = {};".format(body['movie_id'], body['reviewer_id'], body['rating'], body['description'], body['review_id'])
+        sql = "UPDATE reviews set movie_id = {}, reviewer_id = {}, rating = {}, description = {} WHERE review_id = {};".format(body['movie_id'], body['reviewer_id'], body['rating'], con.escape(body['description']), body['review_id'])
         cursor.execute(sql)
         con.commit()
         return sendResponse(PASS, "")

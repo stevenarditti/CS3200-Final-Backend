@@ -28,6 +28,7 @@ CREATE TABLE `actors` (
   `actor_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `biography` varchar(1024) DEFAULT NULL,
+  `headshot_url` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`actor_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -38,7 +39,7 @@ CREATE TABLE `actors` (
 
 LOCK TABLES `actors` WRITE;
 /*!40000 ALTER TABLE `actors` DISABLE KEYS */;
-INSERT INTO `actors` VALUES (1,'Owen Wilson',NULL),(2,'Paul Newman',NULL);
+INSERT INTO `actors` VALUES (1,'Owen Wilson','Owen Cunningham Wilson is an American actor, producer, and screenwriter. He has had a long association with filmmaker Wes Anderson, with whom he shared writing and acting credits for Bottle Rocket and The Royal Tenenbaums, the latter of which earned him a nomination for the Academy Award for Best Original Screenplay.','https://m.media-amazon.com/images/M/MV5BMTgwMzQ4ODYxMV5BMl5BanBnXkFtZTcwNDAwMTc2NQ@@._V1_.jpg'),(2,'Paul Newman','Paul Leonard Newman was an American actor, film director, producer, race car driver, IndyCar owner, entrepreneur, and philanthropist.','https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cg_face%2Cq_auto:good%2Cw_300/MTE1ODA0OTcxNzM3MDU2Nzgx/paul-newman-9422564-1-402.jpg');
 /*!40000 ALTER TABLE `actors` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -65,7 +66,7 @@ CREATE TABLE `cast_members` (
 
 LOCK TABLES `cast_members` WRITE;
 /*!40000 ALTER TABLE `cast_members` DISABLE KEYS */;
-INSERT INTO `cast_members` VALUES (1,1),(2,1),(1,2),(2,2);
+INSERT INTO `cast_members` VALUES (1,1),(2,1),(3,1),(1,2),(2,2),(3,2);
 /*!40000 ALTER TABLE `cast_members` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -79,10 +80,12 @@ DROP TABLE IF EXISTS `movies`;
 CREATE TABLE `movies` (
   `movie_id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
+  `description` varchar(1024) DEFAULT NULL,
   `release_date` date DEFAULT NULL,
   `rating` int(4) DEFAULT NULL,
   `runtime` int(11) NOT NULL,
   `genre` varchar(255) DEFAULT NULL,
+  `poster_url` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`movie_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -93,7 +96,7 @@ CREATE TABLE `movies` (
 
 LOCK TABLES `movies` WRITE;
 /*!40000 ALTER TABLE `movies` DISABLE KEYS */;
-INSERT INTO `movies` VALUES (1,'Cars 2',NULL,6,120,NULL),(2,'Cars',NULL,4,117,NULL),(3,'Cars 3',NULL,NULL,1,NULL);
+INSERT INTO `movies` VALUES (1,'Cars 2','Star race car Lightning McQueen and his pal Mater head overseas to compete in the World Grand Prix race. But the road to the championship becomes rocky as Mater gets caught up in an intriguing adventure of his own: international espionage.',NULL,3,106,NULL,'https://www.verywellfamily.com/thmb/cLmSLeSayJFqMiUqTwGOHhXqi_c=/1920x1080/filters:no_upscale():max_bytes(150000):strip_icc()/LightningMcQueen-56a775435f9b58b7d0eaab52.jpg'),(2,'Cars','A hot-shot race-car named Lightning McQueen gets waylaid in Radiator Springs, where he finds the true meaning of friendship and family.',NULL,10,117,NULL,'https://imgix.ranker.com/user_node_img/50007/1000135319/original/my-name-is-mater-films-photo-u2?w=650&q=50&fm=pjpg&fit=fill&bg=fff'),(3,'Cars 3','Lightning McQueen sets out to prove to a new generation of racers that he\'s still the best race car in the world.',NULL,9,1,NULL,'https://kbimages1-a.akamaihd.net/faf48f11-d8d7-47d3-ab71-4cbd170e22b8/353/569/90/False/cars-3-2.jpg');
 /*!40000 ALTER TABLE `movies` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -120,7 +123,7 @@ CREATE TABLE `reviewers` (
 
 LOCK TABLES `reviewers` WRITE;
 /*!40000 ALTER TABLE `reviewers` DISABLE KEYS */;
-INSERT INTO `reviewers` VALUES (1,'Steve Arditti','2019-06-19',0,4),(2,'Spencer Hurley','2019-06-19',0,8);
+INSERT INTO `reviewers` VALUES (1,'Steve Arditti','2019-06-19',0,7),(2,'Spencer Hurley','2019-06-19',0,6);
 /*!40000 ALTER TABLE `reviewers` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -160,7 +163,7 @@ CREATE TABLE `reviews` (
   KEY `fk_reviews_reviewer_idx` (`reviewer_id`),
   CONSTRAINT `fk_reviews_movie` FOREIGN KEY (`movie_id`) REFERENCES `movies` (`movie_id`),
   CONSTRAINT `fk_reviews_reviewer` FOREIGN KEY (`reviewer_id`) REFERENCES `reviewers` (`reviewer_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -169,7 +172,7 @@ CREATE TABLE `reviews` (
 
 LOCK TABLES `reviews` WRITE;
 /*!40000 ALTER TABLE `reviews` DISABLE KEYS */;
-INSERT INTO `reviews` VALUES (46,1,1,4,'2019-06-20',''),(47,1,2,8,'2019-06-20',''),(48,2,1,4,'2019-06-20','');
+INSERT INTO `reviews` VALUES (46,1,1,4,'2019-06-20','Plot was a bit weird, but the kids seemed to like it.'),(47,1,2,2,'2019-06-20','Ruined my week.'),(48,2,1,10,'2019-06-20','A perfect 10'),(53,3,2,9,'2019-06-20','Now that\'s a good movie.');
 /*!40000 ALTER TABLE `reviews` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -249,23 +252,6 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `reviews_update_movie rating` AFTER UPDATE ON `reviews` FOR EACH ROW BEGIN 
-	CALL update_movie_rating(OLD.movie_id);
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `reviews_update_change_movie_rating` AFTER UPDATE ON `reviews` FOR EACH ROW BEGIN 
 	CALL update_movie_rating(OLD.movie_id);
 END */;;
@@ -283,8 +269,8 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `reviews_delete_update_movie rating` AFTER DELETE ON `reviews` FOR EACH ROW BEGIN 
-	CALL update_movie_rating(OLD.movie_id);
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `reviews_update_change_reviewer_rating` AFTER UPDATE ON `reviews` FOR EACH ROW BEGIN 
+	CALL update_reviewer_rating(OLD.reviewer_id);
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -325,78 +311,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Dumping routines for database 'cs3200final'
---
-/*!50003 DROP PROCEDURE IF EXISTS `update_movie_rating` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `update_movie_rating`(movie_id VARCHAR(255))
-BEGIN
-
-DECLARE num_ratings INT;
-DECLARE avg_rating INT;
-
-
-SET num_ratings =
-(SELECT COUNT(*) FROM reviews r
-WHERE r.movie_id = movie_id);
-
-SET avg_rating = 
-(SELECT SUM(rating) / num_ratings FROM reviews r
-WHERE r.movie_id = movie_id);
-
-UPDATE movies m
-SET rating = avg_rating
-WHERE m.movie_id = movie_id;
-
-END ;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `update_reviewer_rating` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `update_reviewer_rating`(reviewer_id INT)
-BEGIN
-DECLARE num_ratings INT;
-DECLARE avg_rating INT;
-
-
-SET num_ratings =
-(SELECT COUNT(*) FROM reviews r
-WHERE r.reviewer_id = reviewer_id);
-
-SET avg_rating = 
-(SELECT SUM(rating) / num_ratings FROM reviews r
-WHERE r.reviewer_id = reviewer_id);
-
-UPDATE reviewers r
-SET avg_review_score = avg_rating
-WHERE r.reviewer_id = reviewer_id;
-END ;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -407,4 +321,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-06-20 11:26:48
+-- Dump completed on 2019-06-20 21:19:03
